@@ -29,11 +29,9 @@ def read_db(config_path=None):
             host=host,
             port=port
         ), config_path
-    except configparser.NoSectionError as e:
-        print(e)
+    except configparser.NoSectionError:
         return None, config_path
-    except configparser.NoOptionError as e:
-
+    except configparser.NoOptionError:
         return None, config_path
 
 

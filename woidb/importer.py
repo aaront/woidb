@@ -7,7 +7,6 @@ import woidb.models as models
 
 def _importer(file_path):
     name = os.path.basename(file_path)
-    print(name)
     if name == 'games.csv':
         return _load_game
     if name == 'roster.unique.csv':
@@ -34,7 +33,7 @@ def import_csv(file_path):
 def _load_team(session, row):
     team = models.Team(id=row['team'], name=row['TeamName'], city=row['SchedTeamName'],
                        color=row['color'], color2=row['color2'])
-    session.add(team)
+    session.merge(team)
     pass
 
 

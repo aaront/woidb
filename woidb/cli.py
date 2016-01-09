@@ -1,3 +1,5 @@
+import os
+
 import click
 
 import woidb.config
@@ -20,7 +22,13 @@ def init(ctx, database, user, password, host, port):
 @click.argument('f', type=click.Path(exists=True))
 @click.pass_context
 def load(ctx, f):
-    woidb.importer.import_csv(f)
+    if os.path.isdir(f):
+        files = [os.path.join(f, fn) for fn in os.listdir(f)]
+    else:
+        files = [f]
+    with click.progressbar(files, label='Loading data files') as bar:
+        for fi in bar:
+            woidb.importer.import_csv(fi)
 
 
 @click.group()
