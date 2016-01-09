@@ -1,6 +1,5 @@
 
 from sqlalchemy import Column, ForeignKey, String, Integer, Boolean, Date, Time
-from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -24,14 +23,13 @@ class Player(Base):
 class Team(Base):
     __tablename__ = 'teams'
     id = Column(String, primary_key=True)
+    name = Column(String)
+    city = Column(String)
     color = Column(String)
     color2 = Column(String)
-    teamname = Column(String)
-    city = Column(String)
-    games = relationship('Game')
 
     def __repr__(self):
-        return '<Team(id={})>'.format(self.teamname)
+        return '<Team(id={})>'.format(self.id)
 
 
 class Game(Base):

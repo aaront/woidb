@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
-import re
 import ast
-
+import re
 from codecs import open
 
 from setuptools import setup, find_packages
@@ -27,14 +26,22 @@ setup(
     install_requires=requires,
     package_data={'': ['LICENSE']},
     package_dir={'woidb': 'woidb'},
+    license='Apache 2.0',
+    entry_points='''
+        [console_scripts]
+        woidb=woidb.cli:main
+    ''',
     classifiers=(
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
-    )
+        'Topic :: Software Development :: Libraries'
+    ),
 )
