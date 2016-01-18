@@ -1,7 +1,6 @@
 import csv
 import os.path
 
-import woidb.db as db
 import woidb.models as models
 
 
@@ -16,7 +15,7 @@ def _importer(file_path):
     return None
 
 
-def import_csv(file_path):
+def import_csv(file_path, session):
     if not os.path.exists(file_path):
         raise IOError('File "{}" does not exist'.format(file_path))
 
@@ -25,9 +24,8 @@ def import_csv(file_path):
         return
     with open(file_path, 'r') as f:
         reader = csv.DictReader(f)
-        with db.create_session() as session:
-            for row in reader:
-                importer(session, row)
+        for row in reader:
+            importer(session, row)
 
 
 def _load_team(session, row):

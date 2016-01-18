@@ -4,18 +4,16 @@ import click
 
 import woidb.config
 import woidb.db
+import woidb.models
 import woidb.importer
 
 @click.command()
 @click.argument('database')
-@click.option('--user', '-u', prompt=True)
-@click.option('--password', '-p', hide_input=True)
-@click.option('--host', '-h')
-@click.option('--port', '-p')
 @click.pass_context
-def init(ctx, database, user, password, host, port):
-    woidb.db.init(database, user, password, host, port)
-    woidb.config.save_db(database, user, password, host, port)
+def init(ctx, database):
+    engine = woidb.db.connect(database)
+    woidb.models.Base.metadata.create_all(engine)
+    woidb.config.save_db(database)
 
 
 @click.command()
@@ -26,9 +24,10 @@ def load(ctx, f):
         files = [os.path.join(f, fn) for fn in os.listdir(f)]
     else:
         files = [f]
-    with click.progressbar(files, label='Loading data files') as bar:
-        for fi in bar:
-            woidb.importer.import_csv(fi)
+    with woidb.db.create_session() as session:
+        with click.progressbar(files, label='Loading data files') as bar:
+            for fi in bar:
+                woidb.importer.import_csv(fi, session)
 
 
 @click.group()

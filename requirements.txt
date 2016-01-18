@@ -1,4 +1,3 @@
 sqlalchemy>1.0
-psycopg2
 pytz
 click

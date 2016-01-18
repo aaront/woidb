@@ -16,33 +16,17 @@ def _config(config_path):
 def read_db(config_path=None):
     conf, config_path = _config(config_path)
     try:
-        database = conf.get('db', 'database')
-        user = conf.get('db', 'user')
-        password = conf.get('db', 'password')
-        host = conf.get('db', 'host')
-        port = conf.get('db', 'port')
-
-        return dict(
-            database=database,
-            user=user,
-            password=password,
-            host=host,
-            port=port
-        ), config_path
+        return conf.get('db', 'connection'), config_path
     except configparser.NoSectionError:
         return None, config_path
     except configparser.NoOptionError:
         return None, config_path
 
 
-def save_db(database, user, password, host, port, config_path=None):
+def save_db(connection, config_path=None):
     conf, config_path = _config(config_path)
     if 'db' not in conf.sections():
         conf.add_section('db')
-    conf.set('db', 'database', database if database else '')
-    conf.set('db', 'user', user if user else '')
-    conf.set('db', 'password', password if password else '')
-    conf.set('db', 'host', host if host else '')
-    conf.set('db', 'port', port if port else '')
+    conf.set('db', 'connection', connection if connection else '')
     with open(config_path, 'w') as config_file:
         conf.write(config_file)
