@@ -2,8 +2,8 @@ import os
 import unittest
 
 from woidb.db import connect, Session
+from woidb.importers.woi import import_csv
 from woidb.models import Base, Team
-from woidb.importer import import_csv
 
 
 class TestImporter(unittest.TestCase):

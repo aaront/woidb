@@ -4,13 +4,16 @@ import click
 
 import woidb.config
 import woidb.db
+import woidb.importers.woi
 import woidb.models
-import woidb.importer
+
 
 @click.command()
-@click.argument('database')
+@click.argument('database', required=False)
 @click.pass_context
-def init(ctx, database):
+def init(ctx, database=None):
+    if not database:
+        database, config_url = woidb.config.read_db()
     engine = woidb.db.connect(database)
     woidb.models.Base.metadata.create_all(engine)
     woidb.config.save_db(database)
@@ -24,10 +27,11 @@ def load(ctx, f):
         files = [os.path.join(f, fn) for fn in os.listdir(f)]
     else:
         files = [f]
-    with woidb.db.create_session() as session:
+    database, config_url = woidb.config.read_db()
+    with woidb.db.create_session(database) as session:
         with click.progressbar(files, label='Loading data files') as bar:
             for fi in bar:
-                woidb.importer.import_csv(fi, session)
+                woidb.importers.woi.import_csv(fi, session)
 
 
 @click.group()

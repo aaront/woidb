@@ -16,7 +16,7 @@ def _config(config_path):
 def read_db(config_path=None):
     conf, config_path = _config(config_path)
     try:
-        return conf.get('db', 'connection'), config_path
+        return conf.get('db', 'connect'), config_path
     except configparser.NoSectionError:
         return None, config_path
     except configparser.NoOptionError:
@@ -27,6 +27,6 @@ def save_db(connection, config_path=None):
     conf, config_path = _config(config_path)
     if 'db' not in conf.sections():
         conf.add_section('db')
-    conf.set('db', 'connection', connection if connection else '')
+    conf.set('db', 'connect', connection if connection else '')
     with open(config_path, 'w') as config_file:
         conf.write(config_file)
